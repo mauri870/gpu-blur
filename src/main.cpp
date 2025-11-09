@@ -2,25 +2,29 @@
 #include <fstream>
 #include <string>
 
-#include "gpu_blur.hip.hpp"
-
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
 #include "stb_image_write.h"
 
+#include "gpu_blur.hip.hpp"
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " <input_image> <output_image.png>\n";
+        std::cerr << "Usage: " << argv[0] << " <input_image> <output_image.png> <blur_intensity>\n";
         return 1;
     }
 
     std::string input_image = argv[1];
     std::string output_image = argv[2];
+    std::string radius_str = (argc >=4) ? argv[3] : "5";
+    int radius = std::stoi(radius_str);
+    if (radius < 1) {
+        std::cerr << "Blur intensity must be at least 1.\n";
+        return 1;
+    }
 
     int w, h, comp;
-    int radius = 5;
     unsigned char *img = stbi_load(input_image.c_str(), &w, &h, &comp, 3);
     if (img == nullptr) {
         std::cerr << "Error loading image: " << stbi_failure_reason() << "\n";

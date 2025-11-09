@@ -33,23 +33,26 @@ __global__ void blurKernel(const unsigned char *dInputImage, unsigned char *dOut
     int y = blockIdx.y * blockDim.y + threadIdx.y;
     if (x >= width || y >= height) return;
 
-    float3 sum;
-    int count = 0;
+    const int kernelSize = 2 * radius + 1;
+    const int count = kernelSize * kernelSize;
+    
+    int3 sum = {0, 0, 0};
+
+    const int basePixelIndex = (y * width + x) * channels;
 
     for (int dy = -radius; dy <= radius; ++dy) {
         for (int dx = -radius; dx <= radius; ++dx) {
-            int nx = min(max(x +dx, 0), width- 1);
+            int nx = min(max(x + dx, 0), width - 1);
             int ny = min(max(y + dy, 0), height - 1);
             int idx = (ny * width + nx) * channels;
-            sum.x += dInputImage[idx + 0];
-            sum.y += dInputImage[idx + 1];
-            sum.z += dInputImage[idx + 2];
-            count++;
+            
+            sum.x += dInputImage[idx];
+            if (channels > 1) sum.y += dInputImage[idx + 1];
+            if (channels > 2) sum.z += dInputImage[idx + 2];
         }
     }
 
-    int pixelIndex = (y * width + x) * channels;
-    dOutputImage[pixelIndex+0] = sum.x / count;
-    dOutputImage[pixelIndex+1] = sum.y / count;
-    dOutputImage[pixelIndex+2] = sum.z / count;
+    dOutputImage[basePixelIndex] = sum.x / count;
+    if (channels > 1) dOutputImage[basePixelIndex + 1] = sum.y / count;
+    if (channels > 2) dOutputImage[basePixelIndex + 2] = sum.z / count;
 }
