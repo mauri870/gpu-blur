@@ -15,6 +15,10 @@ file (GLOB_RECURSE Headers CONFIGURE_DEPENDS "src/*.hpp")
 file (GLOB_RECURSE HipSources CONFIGURE_DEPENDS "src/*.hip.cpp")
 file (GLOB_RECURSE HipHeaders CONFIGURE_DEPENDS "src/*.hip.hpp")
 
+# Remove .hip.cpp files from regular Sources list
+list(FILTER Sources EXCLUDE REGEX ".*\\.hip\\.cpp$")
+set_source_files_properties(${HipSources} PROPERTIES LANGUAGE HIP)
+
 add_executable(${PROJECT_NAME} ${Sources} ${Headers} ${HipSources} ${HipHeaders})
 target_include_directories(${PROJECT_NAME} PRIVATE ${Stb_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} hip::host)

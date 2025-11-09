@@ -20,6 +20,7 @@ int main(int argc, char* argv[]) {
     std::string output_image = argv[2];
 
     int w, h, comp;
+    int radius = 5;
     unsigned char *img = stbi_load(input_image.c_str(), &w, &h, &comp, 3);
     if (img == nullptr) {
         std::cerr << "Error loading image: " << stbi_failure_reason() << "\n";
@@ -27,10 +28,10 @@ int main(int argc, char* argv[]) {
     }
 
 
-    unsigned char* out = new unsigned char[w * h * 3];
+    unsigned char* out = new unsigned char[w * h * comp];
 
     GPUBlur kernel;
-    kernel.Apply(img, out, w, h, 3);
+    kernel.Apply(img, out, w, h, comp, radius);
 
 
     if (!stbi_write_png(output_image.c_str(), w, h, comp, out, w * comp)) {
