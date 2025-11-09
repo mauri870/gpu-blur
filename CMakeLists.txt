@@ -12,7 +12,7 @@ set(CMAKE_HIP_STANDARD 17)
 
 file (GLOB_RECURSE Sources CONFIGURE_DEPENDS "src/*.cpp")
 file (GLOB_RECURSE Headers CONFIGURE_DEPENDS "src/*.hpp")
-file (GLOB_RECURSE HipSources CONFIGURE_DEPENDS "src/*.hip")
+file (GLOB_RECURSE HipSources CONFIGURE_DEPENDS "src/*.hip.cpp")
 file (GLOB_RECURSE HipHeaders CONFIGURE_DEPENDS "src/*.hip.hpp")
 
 add_executable(${PROJECT_NAME} ${Sources} ${Headers} ${HipSources} ${HipHeaders})

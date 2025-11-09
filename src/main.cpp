@@ -2,10 +2,11 @@
 #include <fstream>
 #include <string>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "gpu_blur.hip.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image.h"
 #include "stb_image_write.h"
 
 
@@ -26,12 +27,19 @@ int main(int argc, char* argv[]) {
     }
 
 
-    if (!stbi_write_png(output_image.c_str(), w, h, comp, img, w * comp)) {
+    unsigned char* out = new unsigned char[w * h * 3];
+
+    GPUBlur kernel;
+    kernel.Apply(img, out, w, h, 3);
+
+
+    if (!stbi_write_png(output_image.c_str(), w, h, comp, out, w * comp)) {
         std::cerr << "Error writing image: " << stbi_failure_reason() << "\n";
         stbi_image_free(img);
         return 1;
     }
 
     stbi_image_free(img);
+    delete[] out;
     return 0;
 }
