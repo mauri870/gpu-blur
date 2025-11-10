@@ -37,7 +37,6 @@ int main(int argc, char* argv[]) {
     GPUBlur kernel;
     kernel.Apply(img, out, w, h, comp, radius);
 
-
     if (!stbi_write_png(output_image.c_str(), w, h, comp, out, w * comp)) {
         std::cerr << "Error writing image: " << stbi_failure_reason() << "\n";
         stbi_image_free(img);

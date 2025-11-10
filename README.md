@@ -2,7 +2,9 @@
 
 This is a tool to apply a Gaussian blur filter to images using the GPU. This is the equivalent of ImageMagick's `convert -blur`, but runs much faster, especially with larger image sizes.
 
-The GPU kernel is written in [HIP](https://rocm.docs.amd.com/projects/HIP/en/docs-develop/what_is_hip.html), so it should work on both AMD and NVIDIA GPUs.
+The GPU kernel is written in [HIP](https://rocm.docs.amd.com/projects/HIP/en/docs-develop/what_is_hip.html) for portability, so it supports both AMD and NVIDIA GPUs.
+
+Accepts the same input formats supported by `stb_image`, and outputs PNG only.
 
 ## Requirements
 
