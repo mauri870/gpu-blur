@@ -2,16 +2,17 @@
 #include <iostream>
 #include <hip/hip_runtime.h>
 
-#define HIP_CHECK(op)                                                      \
-    do {                                                                    \
-        hipError_t e = op;                                                 \
-        if (e != hipSuccess) {                                              \
-            std::cerr << "HIP error: " << hipGetErrorString(e)              \
-                      << " (" << __FILE__ << ":" << __LINE__ << ")"         \
-                      << std::endl;                                         \
-            std::exit(EXIT_FAILURE);                                        \
-        }                                                                   \
-    } while (0)
+#define HIP_CHECK(expression)                  \
+{                                              \
+    const hipError_t status = expression;      \
+    if(status != hipSuccess){                  \
+        std::cerr << "HIP error "              \
+                  << status << ": "            \
+                  << hipGetErrorString(status) \
+                  << " at " << __FILE__ << ":" \
+                  << __LINE__ << std::endl;    \
+    }                                          \
+}
 
 __global__ void blurKernel(const unsigned char *dInputImage, unsigned char *dOutputImage, int width, int height, int channels, int radius);
 

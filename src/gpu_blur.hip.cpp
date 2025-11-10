@@ -21,6 +21,8 @@ void GPUBlur::Apply(const unsigned char *inputImage, unsigned char *outputImage,
         0,
         d_inputImage, d_outputImage, width, height, channels, radius
     );
+    HIP_CHECK(hipGetLastError());
+    HIP_CHECK(hipDeviceSynchronize());
 
     HIP_CHECK(hipMemcpy(outputImage, d_outputImage, width * height * channels, hipMemcpyDeviceToHost));
     HIP_CHECK(hipFree(d_inputImage));
