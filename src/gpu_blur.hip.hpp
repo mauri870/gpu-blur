@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include <hip/hip_runtime.h>
 
 #define HIP_CHECK(expression)                  \
@@ -14,7 +15,9 @@
     }                                          \
 }
 
-__global__ void blurKernel(const unsigned char *dInputImage, unsigned char *dOutputImage, int width, int height, int channels, int radius);
+std::vector<float> makeGaussianKernel(int radius, float sigma);
+
+__global__ void blurKernel(const unsigned char *dInputImage, unsigned char *dOutputImage, int width, int height, int channels, int radius, const float *dGaussianKernel);
 
 class GPUBlur {
 public:
