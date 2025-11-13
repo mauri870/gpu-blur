@@ -31,3 +31,9 @@ cmake --build build -j $(nproc) --config Release
 - `input_image`: Path to the input image file
 - `output_image.png`: Path for the output image (PNG format)
 - `blur_intensity` (optional): Blur radius in pixels (default: 5)
+
+## Example
+
+> gpu-blur a.png b.png 25
+>
+> ![Alt text](./example.png?raw=true "GPU Blur output")
